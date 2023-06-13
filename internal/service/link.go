@@ -24,5 +24,3 @@ func (s *Service) GetShortURL(long string) (string, error) {
 func (s *Service) GetLongURL(short string) (string, error) {
 	return s.repo.GetLongURL(short)
 }
-
-//todo check if it is link
