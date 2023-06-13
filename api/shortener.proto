@@ -1,0 +1,37 @@
+syntax="proto3";
+
+package shortener;
+
+option go_package="pkg/api/shortener;shortener";
+
+import "google/api/annotations.proto";
+
+message GetLongRequest {
+  string url = 1;
+}
+
+message GetLongResponse {
+  string longURL = 1;
+}
+
+message GetShortRequest {
+  string URL = 1;
+}
+
+message GetShortResponse {
+  string shortURL = 1;
+}
+
+service ShortenerService {
+  rpc GetLong(GetLongRequest) returns (GetLongResponse) {
+    option (google.api.http) = {
+      get: "/{url}"
+    };
+  }
+  rpc GetShort(GetShortRequest) returns (GetShortResponse) {
+    option (google.api.http) = {
+      post: "/"
+      body: "*"
+    };
+  }
+}

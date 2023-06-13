@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  db:
+    restart: always
+    image: postgres:latest
+    container_name: "linkdb"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+    #volumes:
+    #  - ./.database/postgre/data:/var/lib/postgresql/data
+    #  - ./migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql
+    #  - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  shortener:
+    restart: always
+    build: ./
+    container_name: "linkapi"
+    command: ./wait-for-postgres.sh db ./shortener
+    environment:
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: "qwerty"
+      DB_DB: "postgres"
+      DB_HOST: "localhost"
+      DB_TABLE: "postgres"
+      DB_PORT: "5432"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+#version: '3'
+#services:
+#  db:
+#    image: postgres
+#    restart: always
+#    ports:
+#      - '5432:5432'
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=qwerty
+#      - POSTGRES_DB=postgres
+#
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - db
+#    links:
+#      - db
+#    environment:
+#      - MODE=db
+#      - DATABASE_URL=postgres://postgres:qwerty@db:5432/postgres

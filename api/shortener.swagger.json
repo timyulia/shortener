@@ -1,0 +1,136 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/shortener.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ShortenerService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "operationId": "ShortenerService_GetShort",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/shortenerGetShortResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/shortenerGetShortRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ShortenerService"
+        ]
+      }
+    },
+    "/{url}": {
+      "get": {
+        "operationId": "ShortenerService_GetLong",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/shortenerGetLongResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ShortenerService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "shortenerGetLongResponse": {
+      "type": "object",
+      "properties": {
+        "longURL": {
+          "type": "string"
+        }
+      }
+    },
+    "shortenerGetShortRequest": {
+      "type": "object",
+      "properties": {
+        "URL": {
+          "type": "string"
+        }
+      }
+    },
+    "shortenerGetShortResponse": {
+      "type": "object",
+      "properties": {
+        "shortURL": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
