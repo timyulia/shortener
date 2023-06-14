@@ -7,14 +7,24 @@ import (
 )
 
 func TestGenerateShortURL(t *testing.T) {
-	t.Run("with forbidden", func(t *testing.T) {
-		t.Parallel()
-		short := generateShortURL("https://www.youtube.com/")
-		assert.Equal(t, "ELZgNmWcOJ", short)
-	})
-	t.Run("ok", func(t *testing.T) {
-		t.Parallel()
-		short := generateShortURL("https://www.google.com")
-		assert.Equal(t, "CL_rVxjFkR", short)
-	})
+	tests := []struct {
+		name  string
+		long  string
+		short string
+	}{
+		{
+			"with forbidden",
+			"https://www.youtube.com/",
+			"ELZgNmWcOJ",
+		},
+		{
+			"ok",
+			"https://www.google.com",
+			"CL_rVxjFkR",
+		},
+	}
+	for _, test := range tests {
+		short := generateShortURL(test.long)
+		assert.Equal(t, test.short, short)
+	}
 }
