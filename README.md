@@ -27,7 +27,8 @@ make migrate
 }
 ```
 
-2. Запрос: http://localhost:8000/CL_rVxjFkR GET__
+2. Запрос: http://localhost:8000/CL_rVxjFkR GET
+
 Ответ:
 ```json
 {
