@@ -1,6 +1,5 @@
 package service
 
-// GetShortURL ...
 func (s *Service) GetShortURL(long string) (string, error) {
 	short := generateShortURL(long)
 	existed, err := s.repo.GetLongURL(short)
@@ -15,12 +14,11 @@ func (s *Service) GetShortURL(long string) (string, error) {
 		if existed == long {
 			return short, nil
 		}
-		short = generateShortURL(short)
+		short = generateShortURL(short) //в случае коллизии генерируется новая короткая ссылка по той короткой ссылке, что была сгенерирована ранее
 		existed, err = s.repo.GetLongURL(short)
 	}
 }
 
-// GetLongURL ...
 func (s *Service) GetLongURL(short string) (string, error) {
 	return s.repo.GetLongURL(short)
 }

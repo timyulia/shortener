@@ -8,7 +8,6 @@ LINK_DB_USER?=postgres
 LINK_DB_PASS?=qwerty
 LINK_DB_DATABASE_NAME?=postgres
 
-
 migrate:
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 	goose -dir migrations postgres \

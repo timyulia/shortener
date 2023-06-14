@@ -21,12 +21,7 @@ type PgxIface interface {
 	Query(context.Context, string, ...interface{}) (pgx.Rows, error)
 }
 
-// Убрать принты
-// вынести константы
-// разнести внутренний, стандартные и внешние пакеты
-
 type Postgres struct {
-	//conn *pgx.Conn
 	conn PgxIface
 }
 
@@ -35,7 +30,6 @@ type linkPair struct {
 	Long  string `db:"long"`
 }
 
-// New ...
 func New(conn PgxIface) *Postgres {
 	return &Postgres{conn: conn}
 }

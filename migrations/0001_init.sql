@@ -4,7 +4,7 @@ CREATE TABLE link
 (
     id serial not null unique,
     short varchar(10) not null unique,
-    long varchar(255) not null unique
+    long varchar(1000) not null unique
 );
 -- +goose StatementEnd
 

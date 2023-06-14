@@ -28,9 +28,10 @@ func (h *Handler) getShort(c *gin.Context) {
 	}
 
 	if _, err := url.ParseRequestURI(in.Link); err != nil {
-		c.JSON(http.StatusOK, map[string]interface{}{
+		c.JSON(http.StatusBadRequest, map[string]interface{}{
 			messageField: "this link is not a valid URL",
 		})
+		return
 	}
 
 	shortURL, err := h.services.GetShortURL(in.Link)
@@ -46,18 +47,24 @@ func (h *Handler) getShort(c *gin.Context) {
 
 func (h *Handler) getLong(c *gin.Context) {
 	link := c.Param(paramURL)
+	if len(link) != 10 {
+		c.JSON(http.StatusBadRequest, map[string]interface{}{
+			messageField: "the short link must consist of 10 characters",
+		})
+		return
+	}
 	long, err := h.services.GetLongURL(link)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	if long == "" {
-		c.JSON(http.StatusOK, map[string]interface{}{
+		c.JSON(http.StatusNotFound, map[string]interface{}{
 			messageField: "there is no such short link yet",
 		})
-	} else {
-		c.JSON(http.StatusOK, map[string]interface{}{
-			longURLField: long,
-		})
+		return
 	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		longURLField: long,
+	})
 }

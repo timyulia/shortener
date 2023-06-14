@@ -1,38 +1,15 @@
-#FROM golang:1.19
-#
-##ENV MODE=inMemory
-#ENV MODE=db
-#
-#RUN go version
-#ENV GOPATH=/
-#
-#COPY ./ ./
-#
-#RUN apt-get update
-#RUN apt-get -y install postgresql-client
-#RUN chmod +x wait-for-postgres.sh
-#
-#
-#RUN go mod download
-#RUN go build -o shortener ./cmd/shortener/main.go
-#
-#RUN echo TESTEST
-#
-#CMD ["./shortener"]
+FROM golang:1.19
 
-FROM golang:latest
+RUN go version
+ENV GOPATH=/
 
-WORKDIR /app
+COPY ./ ./
 
-COPY go.mod .
-COPY go.sum .
+RUN apt-get update
+RUN apt-get -y install postgresql-client
+RUN chmod +x wait-for-postgres.sh
+
 RUN go mod download
+RUN go build -o shortener ./cmd/shortener/main.go
 
-RUN go get -u github.com/pressly/goose/cmd/goose
-RUN goose -version
-
-COPY . .
-
-RUN go build -o main ./cmd/shortener/main.go
-
-CMD ["./main"]
+CMD ["./shortener"]

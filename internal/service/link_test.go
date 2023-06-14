@@ -2,12 +2,12 @@ package service
 
 import (
 	"errors"
-	"github.com/golang/mock/gomock"
-	mock_repo "shortener/internal/repository/mocks"
-
 	"testing"
 
+	mock_repo "shortener/internal/repository/mocks"
+
 	"github.com/c2fo/testify/assert"
+	"github.com/golang/mock/gomock"
 )
 
 func TestService_GetShortURL(t *testing.T) {
@@ -40,11 +40,21 @@ func TestService_GetShortURL(t *testing.T) {
 			},
 			"something went wrong",
 		},
+		{
+			"not existed",
+			"CL_rVxjFkR",
+			"CL_rVxjFkR",
+			"https://www.google.com",
+			func(r *mock_repo.MockRepository, short, long string) {
+				r.EXPECT().GetLongURL(short).Return("", nil)
+				r.EXPECT().AddLinksPair(short, long).Return(nil)
+			},
+			"",
+		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			c := gomock.NewController(t)
-			defer c.Finish()
 
 			repo := mock_repo.NewMockRepository(c)
 			test.mockBehavior(repo, test.short, test.long)
@@ -80,7 +90,6 @@ func TestService_GetLongURL(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			c := gomock.NewController(t)
-			defer c.Finish()
 
 			repo := mock_repo.NewMockRepository(c)
 			test.mockBehavior(repo, test.short, test.long)
