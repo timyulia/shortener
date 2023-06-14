@@ -17,27 +17,27 @@ make migrate
 1. Запрос: http://localhost:8000/  POST
 ```json
 {
-"URL":"https://www.google.com"
+    "URL":"https://www.google.com"
 }
 ```
 Ответ:
 ```json
 {
-"shortURL": "CL_rVxjFkR"
+    "shortURL": "CL_rVxjFkR"
 }
 ```
 
-2. Запрос: http://localhost:8000/CL_rVxjFkR GET
+2. Запрос: http://localhost:8000/CL_rVxjFkR GET__
 Ответ:
 ```json
 {
-"longURL": "https://www.google.com"
+    "longURL": "https://www.google.com"
 }
 ```
 
 Proto файл был создан, но grpc не реализован.
 
-## Тестирование
+## Тестирование с выводом покрытия кода тестами
 
 ```bash
 make test-cover
