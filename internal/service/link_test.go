@@ -60,34 +60,34 @@ func TestService_GetShortURL(t *testing.T) {
 	}
 }
 
-//func TestService_GetLongURL(t *testing.T) {
-//	type mockBehavior func(r *mock_repo.MockRepository, short, long string)
-//	tests := []struct {
-//		name         string
-//		short        string
-//		long         string
-//		mockBehavior mockBehavior
-//	}{
-//		{
-//			"ok",
-//			"CL_rVxjFkR",
-//			"https://www.google.com",
-//			func(r *mock_repo.MockRepository, short, long string) {
-//				r.EXPECT().GetLongURL(short).Return(long, nil)
-//			},
-//		},
-//	}
-//	for _, test := range tests {
-//		t.Run(test.name, func(t *testing.T) {
-//			c := gomock.NewController(t)
-//			defer c.Finish()
-//
-//			repo := mock_repo.NewMockRepository(c)
-//			test.mockBehavior(repo, test.short, test.long)
-//			serv := New(repo)
-//			short, err := serv.GetShortURL(test.long)
-//			assert.NoError(t, err)
-//			assert.Equal(t, test.short, short)
-//		})
-//	}
-//}
+func TestService_GetLongURL(t *testing.T) {
+	type mockBehavior func(r *mock_repo.MockRepository, short, long string)
+	tests := []struct {
+		name         string
+		short        string
+		long         string
+		mockBehavior mockBehavior
+	}{
+		{
+			"ok",
+			"CL_rVxjFkR",
+			"https://www.google.com",
+			func(r *mock_repo.MockRepository, short, long string) {
+				r.EXPECT().GetLongURL(short).Return(long, nil)
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			c := gomock.NewController(t)
+			defer c.Finish()
+
+			repo := mock_repo.NewMockRepository(c)
+			test.mockBehavior(repo, test.short, test.long)
+			serv := New(repo)
+			long, err := serv.GetLongURL(test.short)
+			assert.NoError(t, err)
+			assert.Equal(t, test.long, long)
+		})
+	}
+}
