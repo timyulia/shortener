@@ -1,17 +1,17 @@
 package service
 
 import (
+	"context"
 	"errors"
+	"shortener/internal/service/mock"
 	"testing"
-
-	mock_repo "shortener/internal/repository/mocks"
 
 	"github.com/c2fo/testify/assert"
 	"github.com/golang/mock/gomock"
 )
 
 func TestService_GetShortURL(t *testing.T) {
-	type mockBehavior func(r *mock_repo.MockRepository, short, long string)
+	type mockBehavior func(r *mock.MockRepo, short, long string)
 	tests := []struct {
 		name         string
 		short        string
@@ -25,8 +25,8 @@ func TestService_GetShortURL(t *testing.T) {
 			"CL_rVxjFkR",
 			"CL_rVxjFkR",
 			"https://www.google.com",
-			func(r *mock_repo.MockRepository, short, long string) {
-				r.EXPECT().GetLongURL(short).Return(long, nil)
+			func(r *mock.MockRepo, short, long string) {
+				r.EXPECT().GetLongURL(context.Background(), short).Return(long, nil)
 			},
 			"",
 		},
@@ -35,8 +35,8 @@ func TestService_GetShortURL(t *testing.T) {
 			"CL_rVxjFkR",
 			"",
 			"https://www.google.com",
-			func(r *mock_repo.MockRepository, short, long string) {
-				r.EXPECT().GetLongURL(short).Return("", errors.New("something went wrong"))
+			func(r *mock.MockRepo, short, long string) {
+				r.EXPECT().GetLongURL(context.Background(), short).Return("", errors.New("something went wrong"))
 			},
 			"something went wrong",
 		},
@@ -45,9 +45,9 @@ func TestService_GetShortURL(t *testing.T) {
 			"CL_rVxjFkR",
 			"CL_rVxjFkR",
 			"https://www.google.com",
-			func(r *mock_repo.MockRepository, short, long string) {
-				r.EXPECT().GetLongURL(short).Return("", nil)
-				r.EXPECT().AddLinksPair(short, long).Return(nil)
+			func(r *mock.MockRepo, short, long string) {
+				r.EXPECT().GetLongURL(context.Background(), short).Return("", nil)
+				r.EXPECT().AddLinksPair(context.Background(), short, long).Return(nil)
 			},
 			"",
 		},
@@ -56,10 +56,10 @@ func TestService_GetShortURL(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := gomock.NewController(t)
 
-			repo := mock_repo.NewMockRepository(c)
+			repo := mock.NewMockRepo(c)
 			test.mockBehavior(repo, test.short, test.long)
 			serv := New(repo)
-			short, err := serv.GetShortURL(test.long)
+			short, err := serv.GetShortURL(context.Background(), test.long)
 			if test.err == "" {
 				assert.NoError(t, err)
 			} else {
@@ -71,7 +71,7 @@ func TestService_GetShortURL(t *testing.T) {
 }
 
 func TestService_GetLongURL(t *testing.T) {
-	type mockBehavior func(r *mock_repo.MockRepository, short, long string)
+	type mockBehavior func(r *mock.MockRepo, short, long string)
 	tests := []struct {
 		name         string
 		short        string
@@ -82,8 +82,8 @@ func TestService_GetLongURL(t *testing.T) {
 			"ok",
 			"CL_rVxjFkR",
 			"https://www.google.com",
-			func(r *mock_repo.MockRepository, short, long string) {
-				r.EXPECT().GetLongURL(short).Return(long, nil)
+			func(r *mock.MockRepo, short, long string) {
+				r.EXPECT().GetLongURL(context.Background(), short).Return(long, nil)
 			},
 		},
 	}
@@ -91,10 +91,10 @@ func TestService_GetLongURL(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			c := gomock.NewController(t)
 
-			repo := mock_repo.NewMockRepository(c)
+			repo := mock.NewMockRepo(c)
 			test.mockBehavior(repo, test.short, test.long)
 			serv := New(repo)
-			long, err := serv.GetLongURL(test.short)
+			long, err := serv.GetLongURL(context.Background(), test.short)
 			assert.NoError(t, err)
 			assert.Equal(t, test.long, long)
 		})

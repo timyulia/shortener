@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"context"
 	"sync"
 )
 
@@ -13,14 +14,14 @@ func New() *InMemory {
 	return &InMemory{make(map[string]string), &sync.RWMutex{}}
 }
 
-func (c *InMemory) GetLongURL(short string) (string, error) {
+func (c *InMemory) GetLongURL(ctx context.Context, short string) (string, error) {
 	c.mutex.RLock()
 	long := c.pair[short]
 	c.mutex.RUnlock()
 	return long, nil
 }
 
-func (c *InMemory) AddLinksPair(short, long string) error {
+func (c *InMemory) AddLinksPair(ctx context.Context, short, long string) error {
 	c.mutex.Lock()
 	c.pair[short] = long
 	c.mutex.Unlock()

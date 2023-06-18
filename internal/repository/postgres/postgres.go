@@ -34,14 +34,14 @@ func New(conn PgxIface) *Postgres {
 	return &Postgres{conn: conn}
 }
 
-func (r *Postgres) GetLongURL(short string) (string, error) {
+func (r *Postgres) GetLongURL(ctx context.Context, short string) (string, error) {
 	selectSQL, _, _ := goqu.From(dbLink).
 		Select(colLong).
 		Where(
 			goqu.Ex{colShort: short}).ToSQL()
 	var long string
 
-	err := r.conn.QueryRow(context.Background(), selectSQL).Scan(&long)
+	err := r.conn.QueryRow(ctx, selectSQL).Scan(&long)
 
 	if errors.Is(err, pgx.ErrNoRows) {
 		return "", nil
@@ -50,12 +50,12 @@ func (r *Postgres) GetLongURL(short string) (string, error) {
 	return long, err
 }
 
-func (r *Postgres) AddLinksPair(short, long string) error {
+func (r *Postgres) AddLinksPair(ctx context.Context, short, long string) error {
 	insertSQL, _, _ := goqu.Insert(dbLink).Rows(
 		linkPair{short, long},
 	).ToSQL()
 
-	_, err := r.conn.Exec(context.Background(), insertSQL)
+	_, err := r.conn.Exec(ctx, insertSQL)
 
 	return err
 }

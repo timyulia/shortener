@@ -5,6 +5,7 @@
 package mock
 
 import (
+	context "context"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -34,31 +35,31 @@ func (m *Mockservice) EXPECT() *MockserviceMockRecorder {
 }
 
 // GetLongURL mocks base method.
-func (m *Mockservice) GetLongURL(short string) (string, error) {
+func (m *Mockservice) GetLongURL(ctx context.Context, short string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLongURL", short)
+	ret := m.ctrl.Call(m, "GetLongURL", ctx, short)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetLongURL indicates an expected call of GetLongURL.
-func (mr *MockserviceMockRecorder) GetLongURL(short interface{}) *gomock.Call {
+func (mr *MockserviceMockRecorder) GetLongURL(ctx, short interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLongURL", reflect.TypeOf((*Mockservice)(nil).GetLongURL), short)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLongURL", reflect.TypeOf((*Mockservice)(nil).GetLongURL), ctx, short)
 }
 
 // GetShortURL mocks base method.
-func (m *Mockservice) GetShortURL(long string) (string, error) {
+func (m *Mockservice) GetShortURL(ctx context.Context, long string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetShortURL", long)
+	ret := m.ctrl.Call(m, "GetShortURL", ctx, long)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetShortURL indicates an expected call of GetShortURL.
-func (mr *MockserviceMockRecorder) GetShortURL(long interface{}) *gomock.Call {
+func (mr *MockserviceMockRecorder) GetShortURL(ctx, long interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShortURL", reflect.TypeOf((*Mockservice)(nil).GetShortURL), long)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShortURL", reflect.TypeOf((*Mockservice)(nil).GetShortURL), ctx, long)
 }

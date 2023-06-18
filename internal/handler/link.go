@@ -34,7 +34,7 @@ func (h *Handler) getShort(c *gin.Context) {
 		return
 	}
 
-	shortURL, err := h.services.GetShortURL(in.Link)
+	shortURL, err := h.services.GetShortURL(c, in.Link)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -53,7 +53,7 @@ func (h *Handler) getLong(c *gin.Context) {
 		})
 		return
 	}
-	long, err := h.services.GetLongURL(link)
+	long, err := h.services.GetLongURL(c, link)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

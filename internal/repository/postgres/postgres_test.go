@@ -18,7 +18,7 @@ func TestPostgres_AddLinksPair(t *testing.T) {
 
 	mock.ExpectExec(regexp.QuoteMeta("INSERT INTO \"link\" (\"long\", \"short\") VALUES ('long', 'short')"))
 	p := New(mock)
-	p.AddLinksPair("short", "long")
+	p.AddLinksPair(context.Background(), "short", "long")
 
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %s", err)
@@ -35,7 +35,7 @@ func TestPostgres_GetLongURL(t *testing.T) {
 
 		mock.ExpectQuery(regexp.QuoteMeta("SELECT \"long\" FROM \"link\" WHERE (\"short\" = 'short')")).WillReturnError(pgx.ErrNoRows)
 		p := New(mock)
-		_, err = p.GetLongURL("short")
+		_, err = p.GetLongURL(context.Background(), "short")
 		if err != nil {
 			t.Errorf("error '%s' was not expected, while inserting a row", err)
 		}
@@ -56,7 +56,7 @@ func TestPostgres_GetLongURL(t *testing.T) {
 
 		mock.ExpectQuery(regexp.QuoteMeta("SELECT \"long\" FROM \"link\" WHERE (\"short\" = 'short')")).WillReturnRows(rows)
 		p := New(mock)
-		_, err = p.GetLongURL("short")
+		_, err = p.GetLongURL(context.Background(), "short")
 		if err != nil {
 			t.Errorf("error '%s' was not expected, while inserting a row", err)
 		}

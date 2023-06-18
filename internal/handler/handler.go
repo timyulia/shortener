@@ -3,12 +3,13 @@
 package handler
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 )
 
 type service interface {
-	GetShortURL(long string) (string, error)
-	GetLongURL(short string) (string, error)
+	GetShortURL(ctx context.Context, long string) (string, error)
+	GetLongURL(ctx context.Context, short string) (string, error)
 }
 
 type Handler struct {

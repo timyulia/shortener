@@ -18,7 +18,7 @@ func TestInMemory_AddLinksPair(t *testing.T) {
 		t.Parallel()
 
 		cache := New()
-		err := cache.AddLinksPair("short", "long")
+		err := cache.AddLinksPair(nil, "short", "long")
 
 		assert.NoError(t, err)
 		assert.Equal(t, "long", cache.pair["short"])
@@ -30,8 +30,8 @@ func TestInMemory_GetLongURL(t *testing.T) {
 		t.Parallel()
 
 		cache := New()
-		_ = cache.AddLinksPair("short", "long")
-		value, err := cache.GetLongURL("short")
+		_ = cache.AddLinksPair(nil, "short", "long")
+		value, err := cache.GetLongURL(nil, "short")
 
 		assert.NoError(t, err)
 		assert.Equal(t, "long", value)

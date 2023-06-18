@@ -3,6 +3,7 @@
 package repository
 
 import (
+	"context"
 	"shortener/internal/repository/cache"
 	"shortener/internal/repository/postgres"
 
@@ -10,8 +11,8 @@ import (
 )
 
 type Repository interface {
-	GetLongURL(short string) (string, error)
-	AddLinksPair(short, long string) error
+	GetLongURL(ctx context.Context, short string) (string, error)
+	AddLinksPair(ctx context.Context, short, long string) error
 }
 
 func NewRepositoryDB(conn *pgx.Conn) *postgres.Postgres {
